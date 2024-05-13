@@ -3,4 +3,6 @@
     <string name="before">Sebelumnya</string>
     <string name="next">Selanjutnya</string>
     <string name="finish">selesai</string>
+    <string name="signin">Masuk</string>
+    <string name="username">Username</string>
 </resources>
