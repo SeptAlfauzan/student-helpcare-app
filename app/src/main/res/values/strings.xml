@@ -5,4 +5,5 @@
     <string name="finish">selesai</string>
     <string name="signin">Masuk</string>
     <string name="username">Username</string>
+    <string name="send">Kirim</string>
 </resources>
