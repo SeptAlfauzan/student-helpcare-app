@@ -6,4 +6,6 @@
     <string name="signin">Masuk</string>
     <string name="username">Username</string>
     <string name="send">Kirim</string>
+    <string name="comment">Komentar</string>
+    <string name="see_more_comment">Lihat komentar lainnnya</string>
 </resources>
