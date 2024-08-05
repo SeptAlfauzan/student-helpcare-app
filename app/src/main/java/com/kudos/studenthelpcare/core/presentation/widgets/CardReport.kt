@@ -14,8 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -29,33 +29,34 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kudos.studenthelpcare.R
-import com.kudos.studenthelpcare.core.data.Comment
-import com.kudos.studenthelpcare.core.data.Report
-import com.kudos.studenthelpcare.core.data.UserProfile
+import com.kudos.studenthelpcare.core.domain.entities.Comment
+import com.kudos.studenthelpcare.core.domain.entities.Report
+import com.kudos.studenthelpcare.core.domain.entities.UserProfile
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 import java.time.LocalDate
-import java.util.Date
 
 
 @Composable
 fun CardReport(data: Report) {
-    Column {
+    Column(modifier = Modifier.padding(16.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Column {
+            Column(Modifier.fillMaxWidth()) {
                 Text(text = data.title, fontWeight = FontWeight.Bold)
-                Text(text = data.desc, color = Color(0xFF547288))
+                Text(text = data.desc, color = Color(0xFF547288), textAlign = TextAlign.Right, modifier = Modifier.fillMaxWidth(), fontSize = 12.sp)
             }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null,
-                    modifier = Modifier.rotate(90f)
-                )
-            }
+//            IconButton(onClick = { /*TODO*/ }) {
+//                Icon(
+//                    imageVector = Icons.Default.MoreVert,
+//                    contentDescription = null,
+//                    modifier = Modifier.rotate(90f)
+//                )
+//            }
         }
         Box(
             Modifier
@@ -70,20 +71,15 @@ fun CardReport(data: Report) {
                     .background(Color.Gray)
                     .height(208.dp)
             )
-            IconButton(
-                onClick = { /*TODO*/ }, modifier = Modifier
-                    .padding(12.dp)
+            Icon(
+                imageVector = Icons.Default.Comment,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
                     .align(Alignment.BottomStart)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Call,
-                    contentDescription = null,
-                    tint =if(data.imageUrl != null) Color.White else Color(0xFF0161A7)
-                )
-            }
+            )
             Row(
                 modifier = Modifier
-                    .padding(12.dp)
                     .align(Alignment.BottomEnd)
                     .clip(
                         RoundedCornerShape(8.dp)
@@ -112,22 +108,12 @@ fun CardReport(data: Report) {
                         .padding(top = 24.dp, bottom = 24.dp)
                         .clip(CircleShape)
                         .background(Color.Gray)
-                        .size(64.dp)
+                        .size(36.dp)
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = data.comments[0].userProfile.name, color = Color(0xFF547288), fontWeight = FontWeight.Bold)
-                        Text(text = data.comments[0].created, color = Color(0xFF547288))
-                    }
-                    Text(text =data.comments[0].userProfile.schoolId, color = Color(0xFF547288))
+                    Text(text = "Admin", color = Color(0xFF547288))
                     Text(text = data.comments[0].text)
                 }
-            }
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = stringResource(R.string.see_more_comment))
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.kudos.studenthelpcare.core.data
+package com.kudos.studenthelpcare.core.domain.entities
 
 
 data class Comment(

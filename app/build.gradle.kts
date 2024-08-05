@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.googleGmsGoogleServices)
 }
 
 android {
@@ -59,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,4 +73,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+
+    //Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+
+
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    val nav_version = "2.7.7"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    //extended icons
+    implementation("androidx.compose.material:material-icons-extended:1.6.2")
 }
