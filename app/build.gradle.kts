@@ -83,6 +83,14 @@ dependencies {
 
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
     //extended icons
     implementation("androidx.compose.material:material-icons-extended:1.6.2")
+
+    //Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
 }

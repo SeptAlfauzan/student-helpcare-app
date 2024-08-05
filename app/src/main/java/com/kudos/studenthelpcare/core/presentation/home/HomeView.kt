@@ -2,6 +2,7 @@ package com.kudos.studenthelpcare.core.presentation.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,14 +36,14 @@ fun HomeView(){
             model = "",
             contentDescription = null,
             modifier = Modifier
-                .padding(bottom = 24.dp)
+                .padding(bottom = 8.dp)
                 .align(Alignment.End)
                 .clip(CircleShape)
                 .background(Color.Gray)
                 .size(36.dp)
         )
         Text(text = stringResource(R.string.your_report), modifier = Modifier.padding(bottom = 38.dp), fontWeight = FontWeight.Bold)
-        LazyColumn {
+        LazyColumn(contentPadding = PaddingValues(top = 18.dp)) {
             items(5) {
                 Card(modifier = Modifier.padding(bottom = 12.dp)) {
                 CardReport(
