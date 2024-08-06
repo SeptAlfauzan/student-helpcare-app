@@ -20,12 +20,14 @@ import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.home.HomeView
 import com.kudos.studenthelpcare.core.presentation.postreport.PostReportView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInView
+import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignUpView
 
 @Composable
 fun StudentHelpcareApp(
     navController: NavHostController,
     currentRoute: String?,
+    signInViewModel: SignInViewModel,
     modifier: Modifier = Modifier
 ){
 
@@ -37,7 +39,7 @@ fun StudentHelpcareApp(
             Icon(imageVector = Icons.Default.Create, contentDescription = null)
         }
     }) {innerPadding ->
-        NavHost(navController = navController, startDestination = Routes.Home.route, modifier = Modifier.padding(innerPadding)){
+        NavHost(navController = navController, startDestination = Routes.Signin.route, modifier = Modifier.padding(innerPadding)){
             composable(route = Routes.Home.route){
                 HomeView()
             }
@@ -45,7 +47,7 @@ fun StudentHelpcareApp(
                 PostReportView(navigator = navController)
             }
             composable(route = Routes.Signin.route){
-                SignInView()
+                SignInView(signInViewModel, navController)
             }
             composable(route = Routes.Signup.route){
                 SignUpView()

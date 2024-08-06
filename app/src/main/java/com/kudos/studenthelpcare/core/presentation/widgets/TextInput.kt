@@ -4,6 +4,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -47,7 +50,7 @@ fun TextInput(
         trailingIcon = {
             if (isSecure) IconButton(onClick = { peekPassword = !peekPassword }) {
                 Icon(
-                    imageVector = if (peekPassword) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (!peekPassword) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                     contentDescription = null
                 )
             }

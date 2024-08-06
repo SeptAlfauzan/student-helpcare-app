@@ -45,14 +45,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.kudos.studenthelpcare.R
+import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.widgets.BlueLogo
 import com.kudos.studenthelpcare.core.presentation.widgets.TextInput
 import com.kudos.studenthelpcare.ui.theme.Rounded12
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 
 @Composable
-fun SignInView() {
+fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostController) {
     var password by remember {
         mutableStateOf("")
     }
@@ -78,22 +80,22 @@ fun SignInView() {
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 84.dp)
                 )
-                Button(
-                    onClick = { /*TODO*/ },
-                    border = BorderStroke(width = 1.dp, color = Color(0xFF547288)),
-                    shape = Rounded12,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    )
-                ) {
-                    Image(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = R.drawable.google_ic),
-                        contentDescription = null
-                    )
-                }
-                Text(text = "atau", modifier = Modifier.padding(vertical = 24.dp))
+//                Button(
+//                    onClick = { /*TODO*/ },
+//                    border = BorderStroke(width = 1.dp, color = Color(0xFF547288)),
+//                    shape = Rounded12,
+//                    modifier = Modifier.fillMaxWidth(),
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = MaterialTheme.colorScheme.surface
+//                    )
+//                ) {
+//                    Image(
+//                        modifier = Modifier.size(36.dp),
+//                        painter = painterResource(id = R.drawable.google_ic),
+//                        contentDescription = null
+//                    )
+//                }
+//                Text(text = "atau", modifier = Modifier.padding(vertical = 24.dp))
                 TextInput(
                     value = username,
                     onChange = { username = it },
@@ -116,12 +118,13 @@ fun SignInView() {
                 }
                 Button(
                     shape = Rounded12,
-                    onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()
+                onClick = { signInViewModel.signin(username, password) }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.signin))
                 }
             }
             SpannableTextScreen(
+                navigateCreateAccount = {navHostController.navigate(Routes.Signup.route)},
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.BottomCenter)
@@ -158,7 +161,7 @@ fun SpannableTextScreen(
 private fun Preview() {
     StudentHelpcareTheme {
         Surface {
-            SignInView()
+//            SignInView()
         }
     }
 }
