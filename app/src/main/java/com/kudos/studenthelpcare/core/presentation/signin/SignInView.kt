@@ -1,5 +1,6 @@
 package com.kudos.studenthelpcare.core.presentation.signin
 
+import android.provider.CalendarContract.Colors
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -15,8 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SmsFailed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -27,6 +31,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +54,9 @@ import androidx.navigation.NavHostController
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.widgets.BlueLogo
+import com.kudos.studenthelpcare.core.presentation.widgets.MyAlertDialog
 import com.kudos.studenthelpcare.core.presentation.widgets.TextInput
+import com.kudos.studenthelpcare.core.utils.ResultState
 import com.kudos.studenthelpcare.ui.theme.Rounded12
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 
@@ -61,6 +68,31 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
     var username by remember {
         mutableStateOf("")
     }
+    var errorSignin by remember {
+        mutableStateOf("")
+    }
+
+    signInViewModel.signinResult.collectAsState().value.let {
+        when (it) {
+            is ResultState.Fail -> {
+                errorSignin = it.error?.message ?: "Error unexpected"
+                MyAlertDialog(
+                    isShow = true,
+                    onDismissRequest = { signInViewModel.resetSigninResult() },
+                    onConfirmation = { signInViewModel.resetSigninResult() },
+                    dialogTitle = "Login Gagal!",
+                    dialogText = "Silahkan cek username dan password anda!\n$errorSignin",
+                    icon = Icons.Default.SmsFailed
+                )
+            }
+
+            ResultState.Loading -> {}
+            ResultState.Empty -> {}
+            is ResultState.Success -> {}
+        }
+    }
+
+
     Scaffold { padding ->
         Box(Modifier.fillMaxSize()) {
             Image(
@@ -118,13 +150,20 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                 }
                 Button(
                     shape = Rounded12,
-                onClick = { signInViewModel.signin(username, password) }, modifier = Modifier.fillMaxWidth()
+                    onClick = {
+                        signInViewModel.signin(username, password)
+                    }, modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = stringResource(R.string.signin))
+                    if (signInViewModel.signinResult.collectAsState().value is ResultState.Loading) CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    ) else Text(
+                        text = stringResource(R.string.signin)
+                    )
                 }
             }
             SpannableTextScreen(
-                navigateCreateAccount = {navHostController.navigate(Routes.Signup.route)},
+                navigateCreateAccount = { navHostController.navigate(Routes.Signup.route) },
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.BottomCenter)

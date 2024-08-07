@@ -30,8 +30,6 @@ fun StudentHelpcareApp(
     signInViewModel: SignInViewModel,
     modifier: Modifier = Modifier
 ){
-
-
     Scaffold(
         modifier = Modifier,
         floatingActionButton = {
