@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +20,20 @@ class SignInViewModel @Inject constructor(
     private var _signinResult: MutableStateFlow<ResultState<Boolean>> =
         MutableStateFlow(ResultState.Empty)
     val signinResult: StateFlow<ResultState<Boolean>> = _signinResult
+
+    private var _isLogged: MutableStateFlow<Boolean> =
+        MutableStateFlow(false)
+    val isLogged: StateFlow<Boolean> = _isLogged
+
+
+    init {
+        viewModelScope.launch {
+            authRepository.isLogged().collect {
+                _isLogged.value = it
+            }
+        }
+    }
+
     fun signin(email: String, password: String) {
         viewModelScope.launch {
 
@@ -37,7 +52,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun resetSigninResult(){
+    fun resetSigninResult() {
         _signinResult.value = ResultState.Empty
     }
 }

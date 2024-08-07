@@ -88,7 +88,10 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
 
             ResultState.Loading -> {}
             ResultState.Empty -> {}
-            is ResultState.Success -> {}
+            is ResultState.Success -> {
+                navHostController.navigate(Routes.Home.route)
+                signInViewModel.resetSigninResult()
+            }
         }
     }
 

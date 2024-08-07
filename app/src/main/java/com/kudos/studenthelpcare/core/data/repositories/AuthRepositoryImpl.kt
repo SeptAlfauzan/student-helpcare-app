@@ -7,6 +7,7 @@ import com.kudos.studenthelpcare.core.domain.entities.LoginBody
 import com.kudos.studenthelpcare.core.domain.entities.RegisterBody
 import com.kudos.studenthelpcare.core.domain.repositories.AuthRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
@@ -28,5 +29,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signup(body: RegisterBody): Flow<Boolean> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun isLogged(): Flow<Boolean> {
+        return flowOf(dataStorePreference.getAuthToken().first().isEmpty())
     }
 }

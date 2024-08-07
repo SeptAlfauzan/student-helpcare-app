@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,8 @@ import com.kudos.studenthelpcare.core.presentation.postreport.PostReportView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignUpView
+import okhttp3.Route
+import kotlin.math.sin
 
 @Composable
 fun StudentHelpcareApp(
@@ -31,13 +34,18 @@ fun StudentHelpcareApp(
     modifier: Modifier = Modifier
 ){
     Scaffold(
-        modifier = Modifier,
+        modifier = modifier,
         floatingActionButton = {
         if(currentRoute == Routes.Home.route) FloatingActionButton(onClick = { navController.navigate(Routes.CreatePost.route) }, containerColor = MaterialTheme.colorScheme.primary) {
             Icon(imageVector = Icons.Default.Create, contentDescription = null)
         }
     }) {innerPadding ->
-        NavHost(navController = navController, startDestination = Routes.Signin.route, modifier = Modifier.padding(innerPadding)){
+        NavHost(navController = navController, startDestination = signInViewModel.isLogged.collectAsState().value.let {
+            when(it){
+                true -> Routes.Home.route
+                false -> Routes.Signin.route
+            }
+        } , modifier = Modifier.padding(innerPadding)){
             composable(route = Routes.Home.route){
                 HomeView()
             }
