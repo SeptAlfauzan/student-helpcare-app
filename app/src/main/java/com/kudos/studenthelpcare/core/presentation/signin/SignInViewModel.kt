@@ -55,4 +55,19 @@ class SignInViewModel @Inject constructor(
     fun resetSigninResult() {
         _signinResult.value = ResultState.Empty
     }
+
+    fun logout(){
+        try {
+
+        viewModelScope.launch {
+            authRepository.logout()
+            authRepository.isLogged().collect {
+                _isLogged.value = it
+            }
+        }
+        }catch (e: Exception){
+         e.printStackTrace()
+            throw e
+        }
+    }
 }

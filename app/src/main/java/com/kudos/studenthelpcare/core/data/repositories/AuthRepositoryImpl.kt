@@ -32,6 +32,16 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isLogged(): Flow<Boolean> {
-        return flowOf(dataStorePreference.getAuthToken().first().isEmpty())
+        val token = dataStorePreference.getAuthToken().first()
+        return flowOf(token.isNotEmpty())
+    }
+
+    override suspend fun logout(): Flow<Boolean> {
+        try {
+            dataStorePreference.setAuthToken("")
+            return flowOf(true)
+        }catch (e: Exception){
+            throw e
+        }
     }
 }

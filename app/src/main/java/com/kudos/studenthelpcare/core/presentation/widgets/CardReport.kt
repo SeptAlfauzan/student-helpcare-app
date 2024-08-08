@@ -84,7 +84,7 @@ fun CardReport(data: Report) {
                     .clip(
                         RoundedCornerShape(8.dp)
                     )
-                    .background(Color(0xFF63FFA1))
+                    .background(Color.Green)
                     .padding(6.dp)
             ) {
                 Icon(
