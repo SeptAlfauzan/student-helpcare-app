@@ -12,20 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Comment
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,14 +31,14 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.domain.entities.Comment
-import com.kudos.studenthelpcare.core.domain.entities.Report
+import com.kudos.studenthelpcare.core.domain.entities.Complaint
 import com.kudos.studenthelpcare.core.domain.entities.UserProfile
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 import java.time.LocalDate
 
 
 @Composable
-fun CardReport(data: Report) {
+fun CardReport(data: Complaint) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth()) {
@@ -126,11 +121,12 @@ private fun CardReportPreview() {
         Surface {
             CardReport(
                 data =
-                Report(
+                Complaint(
                     id = "",
                     title = "Laporan pencurian",
                     desc = "Terjadi sekitar pukul 16.00 di kelas D",
                     imageUrl =null,
+                    isResponded = false,
                     comments = listOf(
                         Comment(
                             id="",

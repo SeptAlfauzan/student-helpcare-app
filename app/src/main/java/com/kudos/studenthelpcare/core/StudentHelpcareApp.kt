@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kudos.studenthelpcare.core.helper.Routes
+import com.kudos.studenthelpcare.core.presentation.ComplaintsViewModel
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
 import com.kudos.studenthelpcare.core.presentation.bullying.BullyingView
 import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPasswordView
@@ -47,6 +48,7 @@ fun StudentHelpcareApp(
     schoolViewModel: SchoolViewModel,
     signupViewModel: SignupViewModel,
     forgotPasswordViewModel: ForgotPasswordViewModel,
+    complaintsViewModel: ComplaintsViewModel,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -84,7 +86,7 @@ fun StudentHelpcareApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = Routes.Home.route) {
-                HomeView(navHostController = navController)
+                HomeView(navHostController = navController, complaintsViewModel = complaintsViewModel)
             }
             composable(route = Routes.CreatePost.route) {
                 PostReportView(navigator = navController)

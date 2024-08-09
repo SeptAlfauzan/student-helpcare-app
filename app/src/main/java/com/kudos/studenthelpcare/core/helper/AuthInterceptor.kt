@@ -29,33 +29,33 @@ class AuthInterceptor @Inject constructor(
         if(response.code == 200) Log.d("TAG", "intercept firebase token interceptor: okay")
         if (response.code == 401) {
             Log.d( this.javaClass.simpleName, "intercept: get new token")
-               val newResponse = runBlocking {
-                    callRefreshTokenAPI(chain, originalRequest)
+               val newToken = runBlocking {
+                    callRefreshTokenAPI()
                 }
-           return newResponse
+            response.close()
+            val newRequest = originalRequest.newBuilder()
+                .header("Authorization", "Bearer ${newToken}")
+                .build()
+
+           return chain.proceed(newRequest)
         }
         return response
 //        }
     }
 
-    private suspend fun callRefreshTokenAPI(chain:  Interceptor.Chain, originalReq: Request): Response {
+    private suspend fun callRefreshTokenAPI(): String {
         try {
-            val response = chain.proceed(originalReq)
-            val previousLoginData = dataStorePreference.getPreviousLoginData().first() ?: return response
+            val previousLoginData = dataStorePreference.getPreviousLoginData().first() ?: return ""
+
+            Log.d("TAG", "callRefreshTokenAPI: $previousLoginData")
             val result = authAPIServices.login(previousLoginData!!)
 
             dataStorePreference.setAuthToken(result.data?.token ?: "")
 
-            response.close()
-            val newRequest = originalReq.newBuilder()
-                .header("Authorization", "Bearer ${result.data?.token}")
-                .build()
-            // Retry the request with the new access token
-            return chain.proceed(newRequest)
+            return result.data?.token ?: ""
         } catch (e: Exception) {
             e.printStackTrace()
-            val response = chain.proceed(originalReq)
-            return response
+            return ""
         }
     }
 }
