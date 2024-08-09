@@ -103,6 +103,9 @@ fun ProfileView(
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(text = "Lainnya", color = Color(0xFF547288))
+                    TileMenuItem(text = "Kenali apa itu bullying", action = {
+                        navHostController.navigate(Routes.BullyingMaterial.route)
+                    })
                     TileMenuItem(text = "Reset password", action = {
                         navHostController.navigate(Routes.ChangePassword.route)
                     })

@@ -2,6 +2,7 @@ package com.kudos.studenthelpcare.core.di.modules
 
 import com.kudos.studenthelpcare.core.data.source.datastore.DataStorePreference
 import com.kudos.studenthelpcare.core.data.source.remote.services.AuthAPIServices
+import com.kudos.studenthelpcare.core.data.source.remote.services.SchoolAPIServices
 import com.kudos.studenthelpcare.core.data.source.remote.services.StudentHelpcareAPIServices
 import com.kudos.studenthelpcare.core.helper.AuthInterceptor
 import dagger.Module
@@ -40,19 +41,22 @@ object NetworkModules {
 
     @Provides
     @Singleton
-    fun provideRetrofitWithInterceptor(okHttpClient: OkHttpClient): Retrofit.Builder = Retrofit.Builder()
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+    fun provideRetrofitWithInterceptor(okHttpClient: OkHttpClient): Retrofit.Builder =
+        Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
 
     @Provides
     @Singleton
-    fun provideStudentHelpcareAPIServices(retrofitBuilder: Retrofit.Builder): StudentHelpcareAPIServices  = retrofitBuilder.baseUrl("https://student-helpcare-um.vercel.app/").build().create(
-        StudentHelpcareAPIServices::class.java
-    )
+    fun provideStudentHelpcareAPIServices(retrofitBuilder: Retrofit.Builder): StudentHelpcareAPIServices =
+        retrofitBuilder.baseUrl("https://student-helpcare-um.vercel.app/").build().create(
+            StudentHelpcareAPIServices::class.java
+        )
+
     @Provides
     @Singleton
-    fun provideAuthServices(): AuthAPIServices{
-       val okHttpClient = OkHttpClient.Builder()
+    fun provideAuthServices(): AuthAPIServices {
+        val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
@@ -63,6 +67,23 @@ object NetworkModules {
             .addConverterFactory(GsonConverterFactory.create())
         return retrofitBuilder.baseUrl("https://student-helpcare-um.vercel.app/").build().create(
             AuthAPIServices::class.java
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSchoolServices(): SchoolAPIServices {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+
+        val retrofitBuilder = Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+        return retrofitBuilder.baseUrl("https://student-helpcare-um.vercel.app/").build().create(
+            SchoolAPIServices::class.java
         )
     }
 }

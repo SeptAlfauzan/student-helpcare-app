@@ -10,4 +10,6 @@
     <string name="see_more_comment">Lihat komentar lainnnya</string>
     <string name="insert_message">Masukkan Pesan</string>
     <string name="your_report">Laporanmu</string>
+    <string name="name">name</string>
+    <string name="password">Password</string>
 </resources>

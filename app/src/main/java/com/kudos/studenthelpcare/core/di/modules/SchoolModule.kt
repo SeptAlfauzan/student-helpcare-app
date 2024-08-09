@@ -1,6 +1,7 @@
 package com.kudos.studenthelpcare.core.di.modules
 
 import com.kudos.studenthelpcare.core.data.repositories.SchoolRepositoriesImpl
+import com.kudos.studenthelpcare.core.data.source.remote.services.SchoolAPIServices
 import com.kudos.studenthelpcare.core.data.source.remote.services.StudentHelpcareAPIServices
 import com.kudos.studenthelpcare.core.domain.repositories.SchoolRespository
 import dagger.Module
@@ -17,6 +18,6 @@ import javax.inject.Singleton
 object SchoolModule {
     @Provides
     @Singleton
-    fun provideSchoolRepository(studentHelpcareAPIServices: StudentHelpcareAPIServices): SchoolRespository =
-        SchoolRepositoriesImpl(studentHelpcareAPIServices)
+    fun provideSchoolRepository(schoolAPIServices: SchoolAPIServices): SchoolRespository =
+        SchoolRepositoriesImpl(schoolAPIServices)
 }

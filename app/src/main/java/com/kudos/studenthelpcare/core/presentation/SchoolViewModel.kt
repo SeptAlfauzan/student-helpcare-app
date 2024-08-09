@@ -19,7 +19,7 @@ class SchoolViewModel @Inject constructor(
     private val schoolRespository: SchoolRespository
 ) : ViewModel() {
     private var _schools: MutableStateFlow<ResultState<SchoolsResponse>> =
-        MutableStateFlow(ResultState.Loading)
+        MutableStateFlow(ResultState.Empty)
     val schools: StateFlow<ResultState<SchoolsResponse>> = _schools
 
 

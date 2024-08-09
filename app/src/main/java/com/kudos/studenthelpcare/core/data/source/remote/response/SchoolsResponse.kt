@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class SchoolsResponse(
 
 	@field:SerializedName("data")
-	val data: List<Complain?>? = null
+	val data: List<SchoolDataItem?>? = null
 )
 
-data class DataItem(
+data class SchoolDataItem(
 
 	@field:SerializedName("name")
 	val name: String? = null,

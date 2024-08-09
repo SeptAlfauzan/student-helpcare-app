@@ -115,6 +115,12 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 84.dp)
                 )
+
+                SpannableTextScreen(
+                    navigateCreateAccount = { navHostController.navigate(Routes.Signup.route) },
+                    modifier = Modifier
+                        .padding(bottom = 24.dp)
+                )
 //                Button(
 //                    onClick = { /*TODO*/ },
 //                    border = BorderStroke(width = 1.dp, color = Color(0xFF547288)),
@@ -165,12 +171,6 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                     )
                 }
             }
-            SpannableTextScreen(
-                navigateCreateAccount = { navHostController.navigate(Routes.Signup.route) },
-                modifier = Modifier
-                    .padding(bottom = 24.dp)
-                    .align(Alignment.BottomCenter)
-            )
         }
     }
 }

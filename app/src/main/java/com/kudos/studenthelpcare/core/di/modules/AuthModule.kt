@@ -3,6 +3,7 @@ package com.kudos.studenthelpcare.core.di.modules
 import com.kudos.studenthelpcare.core.data.repositories.AuthRepositoryImpl
 import com.kudos.studenthelpcare.core.data.repositories.SchoolRepositoriesImpl
 import com.kudos.studenthelpcare.core.data.source.datastore.DataStorePreference
+import com.kudos.studenthelpcare.core.data.source.remote.services.AuthAPIServices
 import com.kudos.studenthelpcare.core.data.source.remote.services.StudentHelpcareAPIServices
 import com.kudos.studenthelpcare.core.domain.repositories.AuthRepository
 import com.kudos.studenthelpcare.core.domain.repositories.SchoolRespository
@@ -18,6 +19,6 @@ import javax.inject.Singleton
 object AuthModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(studentHelpcareAPIServices: StudentHelpcareAPIServices, dataStorePreference: DataStorePreference): AuthRepository =
-        AuthRepositoryImpl(studentHelpcareAPIServices, dataStorePreference)
+    fun provideAuthRepository(authAPIServices: AuthAPIServices, dataStorePreference: DataStorePreference): AuthRepository =
+        AuthRepositoryImpl(authAPIServices, dataStorePreference)
 }

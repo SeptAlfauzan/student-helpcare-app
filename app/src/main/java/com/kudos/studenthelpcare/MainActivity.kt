@@ -26,6 +26,7 @@ import com.kudos.studenthelpcare.core.data.repositories.SchoolRepositoriesImpl
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
+import com.kudos.studenthelpcare.core.presentation.signup.SignupViewModel
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val schoolViewModel: SchoolViewModel by viewModels()
     private val signInViewModel: SignInViewModel by viewModels()
+    private val signupViewModel: SignupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +56,13 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     Column {
-                        StudentHelpcareApp(navController, currentRoute = currentRoute, signInViewModel)
+                        StudentHelpcareApp(
+                            navController,
+                            currentRoute = currentRoute,
+                            signInViewModel,
+                            schoolViewModel,
+                            signupViewModel
+                        )
                     }
                 }
             }

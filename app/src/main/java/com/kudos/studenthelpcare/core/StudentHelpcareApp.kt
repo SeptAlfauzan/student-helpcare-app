@@ -11,6 +11,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +23,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kudos.studenthelpcare.core.helper.Routes
+import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
+import com.kudos.studenthelpcare.core.presentation.bullying.BullyingView
 import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPasswordView
 import com.kudos.studenthelpcare.core.presentation.home.HomeView
 import com.kudos.studenthelpcare.core.presentation.postreport.PostReportView
@@ -29,6 +32,7 @@ import com.kudos.studenthelpcare.core.presentation.profile.ProfileView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignUpView
+import com.kudos.studenthelpcare.core.presentation.signup.SignupViewModel
 import okhttp3.Route
 import kotlin.math.sin
 
@@ -38,12 +42,15 @@ fun StudentHelpcareApp(
     navController: NavHostController,
     currentRoute: String?,
     signInViewModel: SignInViewModel,
+    schoolViewModel: SchoolViewModel,
+signupViewModel: SignupViewModel,
     modifier: Modifier = Modifier
 ) {
+    val backgroundColor = MaterialTheme.colorScheme.background
     Scaffold(
         modifier = modifier,
         topBar = {
-            if (currentRoute == Routes.ChangePassword.route) TopAppBar(
+            if (currentRoute == Routes.ChangePassword.route || currentRoute == Routes.BullyingMaterial.route) TopAppBar(
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -83,13 +90,16 @@ fun StudentHelpcareApp(
                 SignInView(signInViewModel, navController)
             }
             composable(route = Routes.Signup.route) {
-                SignUpView()
+                SignUpView(navController, schoolViewModel = schoolViewModel, signupViewModel = signupViewModel)
             }
             composable(route = Routes.Profile.route) {
                 ProfileView(signInViewModel = signInViewModel, navHostController = navController)
             }
             composable(route = Routes.ChangePassword.route) {
                 ForgotPasswordView(navController)
+            }
+            composable(route = Routes.BullyingMaterial.route) {
+                BullyingView()
             }
         }
     }
