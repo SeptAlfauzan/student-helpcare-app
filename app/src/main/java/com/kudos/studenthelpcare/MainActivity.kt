@@ -25,6 +25,7 @@ import com.kudos.studenthelpcare.core.StudentHelpcareApp
 import com.kudos.studenthelpcare.core.data.repositories.SchoolRepositoriesImpl
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
+import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPasswordViewModel
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignupViewModel
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
     private val schoolViewModel: SchoolViewModel by viewModels()
     private val signInViewModel: SignInViewModel by viewModels()
     private val signupViewModel: SignupViewModel by viewModels()
+    private val forgotPasswordViewModel: ForgotPasswordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +63,8 @@ class MainActivity : ComponentActivity() {
                             currentRoute = currentRoute,
                             signInViewModel,
                             schoolViewModel,
-                            signupViewModel
+                            signupViewModel,
+                            forgotPasswordViewModel
                         )
                     }
                 }

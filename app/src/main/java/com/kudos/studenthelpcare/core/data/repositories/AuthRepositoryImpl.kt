@@ -1,5 +1,8 @@
 package com.kudos.studenthelpcare.core.data.repositories
 
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.kudos.studenthelpcare.core.data.source.datastore.DataStorePreference
 import com.kudos.studenthelpcare.core.data.source.remote.services.AuthAPIServices
 import com.kudos.studenthelpcare.core.data.source.remote.services.StudentHelpcareAPIServices
@@ -48,5 +51,11 @@ class AuthRepositoryImpl @Inject constructor(
         }catch (e: Exception){
             throw e
         }
+    }
+
+    override suspend fun forgotPassword(email: String, onSuccess: () -> Unit, onFail: (Exception) -> Unit) {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener {
+                onSuccess()
+            }.addOnFailureListener { onFail(it) }
     }
 }

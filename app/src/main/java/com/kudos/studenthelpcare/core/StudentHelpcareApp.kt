@@ -26,6 +26,7 @@ import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
 import com.kudos.studenthelpcare.core.presentation.bullying.BullyingView
 import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPasswordView
+import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPasswordViewModel
 import com.kudos.studenthelpcare.core.presentation.home.HomeView
 import com.kudos.studenthelpcare.core.presentation.postreport.PostReportView
 import com.kudos.studenthelpcare.core.presentation.profile.ProfileView
@@ -43,10 +44,10 @@ fun StudentHelpcareApp(
     currentRoute: String?,
     signInViewModel: SignInViewModel,
     schoolViewModel: SchoolViewModel,
-signupViewModel: SignupViewModel,
+    signupViewModel: SignupViewModel,
+    forgotPasswordViewModel: ForgotPasswordViewModel,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = MaterialTheme.colorScheme.background
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -79,7 +80,8 @@ signupViewModel: SignupViewModel,
                     false -> Routes.Signin.route
                 }
             },
-            modifier = Modifier.padding(innerPadding)) {
+            modifier = Modifier.padding(innerPadding)
+        ) {
             composable(route = Routes.Home.route) {
                 HomeView(navHostController = navController)
             }
@@ -90,13 +92,17 @@ signupViewModel: SignupViewModel,
                 SignInView(signInViewModel, navController)
             }
             composable(route = Routes.Signup.route) {
-                SignUpView(navController, schoolViewModel = schoolViewModel, signupViewModel = signupViewModel)
+                SignUpView(
+                    navController,
+                    schoolViewModel = schoolViewModel,
+                    signupViewModel = signupViewModel
+                )
             }
             composable(route = Routes.Profile.route) {
                 ProfileView(signInViewModel = signInViewModel, navHostController = navController)
             }
             composable(route = Routes.ChangePassword.route) {
-                ForgotPasswordView(navController)
+                ForgotPasswordView(navController, forgotPasswordViewModel)
             }
             composable(route = Routes.BullyingMaterial.route) {
                 BullyingView()

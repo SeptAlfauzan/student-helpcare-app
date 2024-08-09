@@ -9,4 +9,6 @@ interface AuthRepository {
     suspend fun signup(body: SignupBody) : Flow<Boolean>
     suspend fun isLogged() : Flow<Boolean>
     suspend fun logout() : Flow<Boolean>
+
+    suspend fun forgotPassword(email: String, onSuccess: () -> Unit, onFail: (Exception) -> Unit)
 }

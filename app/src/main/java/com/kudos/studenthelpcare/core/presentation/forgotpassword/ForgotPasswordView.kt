@@ -1,5 +1,6 @@
 package com.kudos.studenthelpcare.core.presentation.forgotpassword
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,13 +8,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.SmsFailed
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,41 +36,52 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.kudos.studenthelpcare.R
+import com.kudos.studenthelpcare.core.presentation.widgets.MyAlertDialog
 import com.kudos.studenthelpcare.core.presentation.widgets.TextInput
+import com.kudos.studenthelpcare.core.utils.ResultState
+import com.kudos.studenthelpcare.core.utils.validateEmailValid
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ForgotPasswordView(
     navHostController: NavHostController,
+    forgotPasswordViewModel: ForgotPasswordViewModel,
     modifier: Modifier = Modifier,
 ) {
     var isSuccessfullySendEmail by remember {
         mutableStateOf(false)
     }
 
+    LaunchedEffect(Unit) {
+        Log.d("TAG", "ForgotPasswordView:  triggered")
+        isSuccessfullySendEmail = false
+    }
+
     Box(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.pattern),
+        Image(painter = painterResource(id = R.drawable.pattern),
             contentDescription = "pattern bg",
-modifier = Modifier.drawWithCache {
-            onDrawWithContent {
-                drawContent()
-                drawRect(
-                    Brush.verticalGradient(
-                    0f to Color.White,
-                    0.6f to Color.Transparent,
-                ))
-            }
-        } )
+            modifier = Modifier.drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(
+                        Brush.verticalGradient(
+                            0f to Color.White,
+                            0.6f to Color.Transparent,
+                        )
+                    )
+                }
+            })
         if (!isSuccessfullySendEmail) InputTemplateLayout(
-            // TODO: CHANGE THIS PLZ
-            onSendEmail = { isSuccessfullySendEmail = true },
+            onSendEmail = { forgotPasswordViewModel.sendResetPasswordToEmail(email = it) },
+            onSuccess = { isSuccessfullySendEmail = true },
+            state = forgotPasswordViewModel.state,
             Modifier.align(Alignment.Center)
         ) else SuccessSendTemplateLayout(
-            onNavBack = { navHostController.popBackStack() },
-            Modifier.align(
+            onNavBack = {
+                navHostController.popBackStack()
+            }, Modifier.align(
                 Alignment.Center
             )
         )
@@ -72,11 +90,36 @@ modifier = Modifier.drawWithCache {
 
 @Composable
 private fun InputTemplateLayout(
-    onSendEmail: () -> Unit,
-    modifier: Modifier = Modifier
+    onSendEmail: (String) -> Unit,
+    onSuccess: () -> Unit,
+    state: StateFlow<ResultState<String>>, modifier: Modifier = Modifier,
 ) {
     var email by remember {
         mutableStateOf("")
+    }
+    var loading by remember {
+        mutableStateOf(false)
+    }
+
+    state.collectAsState().value.let {
+        when (it) {
+            ResultState.Empty -> loading = false
+            is ResultState.Fail -> {
+                MyAlertDialog(onDismissRequest = { /*TODO*/ },
+                    onConfirmation = { /*TODO*/ },
+                    dialogTitle = "Fail to reset password!",
+                    dialogText = it.error?.message ?: "Error when sending email reset password!",
+                    icon = Icons.Default.SmsFailed
+                )
+                loading = false
+            }
+
+            ResultState.Loading -> loading = true
+            is ResultState.Success -> {
+                onSuccess()
+                loading = false
+            }
+        }
     }
     Column(
         modifier
@@ -98,20 +141,23 @@ private fun InputTemplateLayout(
             )
         }
         Button(
-            onClick = { onSendEmail() },
+            enabled = email.isNotEmpty() && email.validateEmailValid(),
+            onClick = { onSendEmail(email) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
         ) {
-            Text(text = "Kirim email ganti password")
+            if (loading) CircularProgressIndicator(
+                color = Color.White, modifier = Modifier.size(24.dp)
+            ) else Text(text = "Kirim email ganti password")
+
         }
     }
 }
 
 @Composable
 private fun SuccessSendTemplateLayout(
-    onNavBack: () -> Unit,
-    modifier: Modifier = Modifier
+    onNavBack: () -> Unit, modifier: Modifier = Modifier
 ) {
     Column(
         modifier
