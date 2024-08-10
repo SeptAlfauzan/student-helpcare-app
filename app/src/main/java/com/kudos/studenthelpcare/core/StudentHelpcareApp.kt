@@ -91,7 +91,10 @@ fun StudentHelpcareApp(
                 )
             }
             composable(route = Routes.CreatePost.route) {
-                PostReportView(navigator = navController)
+                PostReportView(
+                    profileViewModel = profileViewModel,
+                    complaintsViewModel = complaintsViewModel,
+                    navigator = navController)
             }
             composable(route = Routes.Signin.route) {
                 SignInView(signInViewModel, navController)

@@ -117,25 +117,6 @@ fun HomeView(
                         onRefresh = {
                             complaintsViewModel.getMyComplaints()
                         })
-//                    LazyColumn(contentPadding = PaddingValues(top = 18.dp)) {
-//                        if (reportData.isEmpty()) {
-//                            item {
-//                                Text(
-//                                    text = "Kamu belum membuat laporan, klik tombol dibawah untuk memnuat laporan baru",
-//                                    fontWeight = FontWeight.Light,
-//                                    textAlign = TextAlign.Center
-//                                )
-//                            }
-//                        } else {
-//                            items(it.data) {
-//                                Card(modifier = Modifier.padding(bottom = 12.dp)) {
-//                                    CardReport(
-//                                        data = it
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
                 }
             }
         }
