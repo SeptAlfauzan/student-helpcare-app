@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kudos.studenthelpcare"
-        minSdk = 28
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -104,4 +104,6 @@ dependencies {
 
     //pull refresh
     implementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    //splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
 }

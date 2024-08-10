@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/brand</item>
+        <item name="postSplashScreenTheme">@style/Theme.StudentHelpcare</item>
+    </style>
 
     <style name="Theme.StudentHelpcare" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
