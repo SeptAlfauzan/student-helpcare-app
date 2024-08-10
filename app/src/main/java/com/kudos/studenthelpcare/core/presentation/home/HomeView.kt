@@ -36,7 +36,9 @@ import com.kudos.studenthelpcare.core.domain.entities.Complaint
 import com.kudos.studenthelpcare.core.domain.entities.UserProfile
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.ComplaintsViewModel
+import com.kudos.studenthelpcare.core.presentation.profile.ProfileViewModel
 import com.kudos.studenthelpcare.core.presentation.widgets.CardReport
+import com.kudos.studenthelpcare.core.presentation.widgets.ErrorHandler
 import com.kudos.studenthelpcare.core.presentation.widgets.PulltoRefreshLazyColumn
 import com.kudos.studenthelpcare.core.utils.ResultState
 import java.time.LocalDate
@@ -44,22 +46,38 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
-    navHostController: NavHostController, complaintsViewModel: ComplaintsViewModel
+    profileViewModel: ProfileViewModel,
+    navHostController: NavHostController,
+    complaintsViewModel: ComplaintsViewModel
 ) {
+    val profileState = profileViewModel.profileState.collectAsState().value
+    val avatarModifier = Modifier.padding(bottom = 8.dp)
     Column(
         Modifier
             .padding(top = 20.dp)
             .padding(horizontal = 24.dp)
     ) {
-        AsyncImage(model = "https://ui-avatars.com/api/?name=Elon+Musk",
-            contentDescription = null,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.End)
-                .clip(CircleShape)
-                .background(Color.Gray)
-                .size(36.dp)
-                .clickable { navHostController.navigate(Routes.Profile.route) })
+
+        profileState.let {
+            when (it) {
+                ResultState.Empty -> profileViewModel.getProfile()
+                is ResultState.Fail -> ErrorHandler(error = it.error,
+                    onRefresh = { profileViewModel.getProfile() })
+
+                ResultState.Loading -> CircularProgressIndicator(
+                    modifier = avatarModifier.align(Alignment.End)
+                )
+
+                is ResultState.Success -> AsyncImage(model = it.data.data?.photoUrl ?: "-",
+                    contentDescription = null,
+                    modifier = avatarModifier
+                        .align(Alignment.End)
+                        .clip(CircleShape)
+                        .background(Color.Gray)
+                        .size(36.dp)
+                        .clickable { navHostController.navigate(Routes.Profile.route) })
+            }
+        }
         Text(
             text = stringResource(R.string.your_report),
             fontWeight = FontWeight.Bold,
@@ -87,8 +105,7 @@ fun HomeView(
                 }
 
                 is ResultState.Success -> {
-                    PulltoRefreshLazyColumn(
-                        items = it.data,
+                    PulltoRefreshLazyColumn(items = it.data,
                         content = {
                             Card {
                                 CardReport(
@@ -127,7 +144,10 @@ fun HomeView(
 
 val reportData = listOf(
     Complaint(
-        id = "", title = "title", desc = "desc", imageUrl = null,
+        id = "",
+        title = "title",
+        desc = "desc",
+        imageUrl = null,
         isResponded = false,
         comments = listOf(
             Comment(

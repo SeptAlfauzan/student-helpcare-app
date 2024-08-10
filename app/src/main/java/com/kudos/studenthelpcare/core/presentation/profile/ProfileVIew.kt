@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.SmsFailed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,96 +37,108 @@ import coil.compose.AsyncImage
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
+import com.kudos.studenthelpcare.core.presentation.widgets.ErrorHandler
 import com.kudos.studenthelpcare.core.presentation.widgets.MyAlertDialog
+import com.kudos.studenthelpcare.core.utils.ResultState
 
 @Composable
 fun ProfileView(
+    profileViewModel: ProfileViewModel,
     signInViewModel: SignInViewModel,
     navHostController: NavHostController,
 ) {
-
-    Box(Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.pattern),
-            contentDescription = "pattern bg",
-        )
-        Column(
-            Modifier
-                .fillMaxSize()
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
-            ) {
-                AsyncImage(
-                    model = "", contentDescription = "profile-img", modifier = Modifier
-                        .size(72.dp)
-                        .clip(
-                            CircleShape
-                        )
-                        .background(Color.Gray)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(
-                            RoundedCornerShape(12.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = 14.dp, vertical = 4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.School,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
-                    Text(text = "SMA 1 Blablabla", color = Color.White)
+        profileViewModel.profileState.collectAsState().value.let {
+            when(it){
+                ResultState.Empty -> profileViewModel.getProfile()
+                is ResultState.Fail -> ErrorHandler(error = it.error, onRefresh = { profileViewModel.getProfile() })
+                ResultState.Loading -> Box(Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-            }
-
-            Column(
-                Modifier
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(Color.White)
-                    .padding(24.dp)
-                    .weight(1f)
-            ) {
-                Text(text = "Lindy", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-                Text(
-                    text = "@Lindy",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 24.sp,
-                    modifier = Modifier.padding(bottom = 32.dp)
-                )
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(text = "Lainnya", color = Color(0xFF547288))
-                    TileMenuItem(text = "Kenali apa itu bullying", action = {
-                        navHostController.navigate(Routes.BullyingMaterial.route)
-                    })
-                    TileMenuItem(text = "Reset password", action = {
-                        navHostController.navigate(Routes.ChangePassword.route)
-                    })
-                    TileMenuItem(text = "Keluar", action = {
-                        try {
-                            signInViewModel.logout()
-                            navHostController.navigate(Routes.Signin.route) {
-                                popUpTo(navHostController.graph.id) {
-                                    inclusive = false
-                                }
+                is ResultState.Success ->  Box(Modifier.fillMaxSize()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.pattern),
+                        contentDescription = "pattern bg",
+                    )
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp)
+                        ) {
+                            AsyncImage(
+                                model = it.data.data?.photoUrl, contentDescription = "profile-img", modifier = Modifier
+                                    .size(72.dp)
+                                    .clip(
+                                        CircleShape
+                                    )
+                                    .background(Color.Gray)
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .clip(
+                                        RoundedCornerShape(12.dp)
+                                    )
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .padding(horizontal = 14.dp, vertical = 4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.School,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                                Text(text = it.data.data?.schoolName ?: "-", color = Color.White)
                             }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
                         }
-                    })
+
+                        Column(
+                            Modifier
+                                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                                .background(Color.White)
+                                .padding(24.dp)
+                                .weight(1f)
+                        ) {
+                            Text(text = it.data.data?.name ?: "-", fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                            Text(
+                                text = it.data.data?.email ?: "-"    ,
+                                fontWeight = FontWeight.Light,
+                                fontSize = 24.sp,
+                                modifier = Modifier.padding(bottom = 32.dp)
+                            )
+                            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                Text(text = "Lainnya", color = Color(0xFF547288))
+                                TileMenuItem(text = "Kenali apa itu bullying", action = {
+                                    navHostController.navigate(Routes.BullyingMaterial.route)
+                                })
+                                TileMenuItem(text = "Reset password", action = {
+                                    navHostController.navigate(Routes.ChangePassword.route)
+                                })
+                                TileMenuItem(text = "Keluar", action = {
+                                    try {
+                                        signInViewModel.logout()
+                                        navHostController.navigate(Routes.Signin.route) {
+                                            popUpTo(navHostController.graph.id) {
+                                                inclusive = false
+                                            }
+                                        }
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                })
+                            }
+                        }
+                    }
+
                 }
             }
         }
 
-    }
 }
 
 

@@ -32,6 +32,7 @@ import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPassword
 import com.kudos.studenthelpcare.core.presentation.home.HomeView
 import com.kudos.studenthelpcare.core.presentation.postreport.PostReportView
 import com.kudos.studenthelpcare.core.presentation.profile.ProfileView
+import com.kudos.studenthelpcare.core.presentation.profile.ProfileViewModel
 import com.kudos.studenthelpcare.core.presentation.signin.SignInView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignUpView
@@ -49,32 +50,29 @@ fun StudentHelpcareApp(
     signupViewModel: SignupViewModel,
     forgotPasswordViewModel: ForgotPasswordViewModel,
     complaintsViewModel: ComplaintsViewModel,
+    profileViewModel: ProfileViewModel,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            if (currentRoute == Routes.ChangePassword.route || currentRoute == Routes.BullyingMaterial.route) TopAppBar(
-                title = { },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ChevronLeft,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
+    Scaffold(modifier = modifier, topBar = {
+        if (currentRoute == Routes.ChangePassword.route || currentRoute == Routes.BullyingMaterial.route) TopAppBar(
+            title = { },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ChevronLeft, contentDescription = "Back"
+                    )
+                }
+            },
+        )
+    }, floatingActionButton = {
+        if (currentRoute == Routes.Home.route) FloatingActionButton(onClick = {
+            navController.navigate(
+                Routes.CreatePost.route
             )
-        },
-        floatingActionButton = {
-            if (currentRoute == Routes.Home.route) FloatingActionButton(onClick = {
-                navController.navigate(
-                    Routes.CreatePost.route
-                )
-            }, containerColor = MaterialTheme.colorScheme.primary) {
-                Icon(imageVector = Icons.Default.Create, contentDescription = null)
-            }
-        }) { innerPadding ->
+        }, containerColor = MaterialTheme.colorScheme.primary) {
+            Icon(imageVector = Icons.Default.Create, contentDescription = null)
+        }
+    }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = signInViewModel.isLogged.collectAsState().value.let {
@@ -86,7 +84,11 @@ fun StudentHelpcareApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = Routes.Home.route) {
-                HomeView(navHostController = navController, complaintsViewModel = complaintsViewModel)
+                HomeView(
+                    navHostController = navController,
+                    profileViewModel = profileViewModel,
+                    complaintsViewModel = complaintsViewModel
+                )
             }
             composable(route = Routes.CreatePost.route) {
                 PostReportView(navigator = navController)
@@ -102,7 +104,9 @@ fun StudentHelpcareApp(
                 )
             }
             composable(route = Routes.Profile.route) {
-                ProfileView(signInViewModel = signInViewModel, navHostController = navController)
+                ProfileView(
+                    profileViewModel = profileViewModel,
+                    signInViewModel = signInViewModel, navHostController = navController)
             }
             composable(route = Routes.ChangePassword.route) {
                 ForgotPasswordView(navController, forgotPasswordViewModel)
