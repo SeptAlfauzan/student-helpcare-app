@@ -14,7 +14,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -35,20 +37,21 @@ import com.kudos.studenthelpcare.core.domain.entities.UserProfile
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.ComplaintsViewModel
 import com.kudos.studenthelpcare.core.presentation.widgets.CardReport
+import com.kudos.studenthelpcare.core.presentation.widgets.PulltoRefreshLazyColumn
 import com.kudos.studenthelpcare.core.utils.ResultState
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
     navHostController: NavHostController, complaintsViewModel: ComplaintsViewModel
 ) {
-
     Column(
         Modifier
             .padding(top = 20.dp)
             .padding(horizontal = 24.dp)
     ) {
-        AsyncImage(model = "",
+        AsyncImage(model = "https://ui-avatars.com/api/?name=Elon+Musk",
             contentDescription = null,
             modifier = Modifier
                 .padding(bottom = 8.dp)
@@ -72,29 +75,50 @@ fun HomeView(
                         Text(text = "Retry")
                     }
                 }
-                ResultState.Loading -> Column(Modifier.fillMaxWidth().weight(1f), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+
+                ResultState.Loading -> Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
                     CircularProgressIndicator()
                 }
+
                 is ResultState.Success -> {
-                    LazyColumn(contentPadding = PaddingValues(top = 18.dp)) {
-                        if (reportData.isEmpty()) {
-                            item {
-                                Text(
-                                    text = "Kamu belum membuat laporan, klik tombol dibawah untuk memnuat laporan baru",
-                                    fontWeight = FontWeight.Light,
-                                    textAlign = TextAlign.Center
+                    PulltoRefreshLazyColumn(
+                        items = it.data,
+                        content = {
+                            Card {
+                                CardReport(
+                                    data = it
                                 )
                             }
-                        } else {
-                            items(it.data) {
-                                Card(modifier = Modifier.padding(bottom = 12.dp)) {
-                                    CardReport(
-                                        data = it
-                                    )
-                                }
-                            }
-                        }
-                    }
+                        },
+                        isRefreshing = complaintsViewModel.complaints.collectAsState().value == ResultState.Loading,
+                        onRefresh = {
+                            complaintsViewModel.getMyComplaints()
+                        })
+//                    LazyColumn(contentPadding = PaddingValues(top = 18.dp)) {
+//                        if (reportData.isEmpty()) {
+//                            item {
+//                                Text(
+//                                    text = "Kamu belum membuat laporan, klik tombol dibawah untuk memnuat laporan baru",
+//                                    fontWeight = FontWeight.Light,
+//                                    textAlign = TextAlign.Center
+//                                )
+//                            }
+//                        } else {
+//                            items(it.data) {
+//                                Card(modifier = Modifier.padding(bottom = 12.dp)) {
+//                                    CardReport(
+//                                        data = it
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
                 }
             }
         }

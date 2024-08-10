@@ -101,4 +101,7 @@ dependencies {
     implementation("com.halilibo.compose-richtext:richtext-ui-material3:1.0.0-alpha01")
     implementation("com.halilibo.compose-richtext:richtext-markdown:1.0.0-alpha01")
     implementation("com.halilibo.compose-richtext:richtext-commonmark:1.0.0-alpha01")
+
+    //pull refresh
+    implementation(platform("androidx.compose:compose-bom:2024.02.01"))
 }

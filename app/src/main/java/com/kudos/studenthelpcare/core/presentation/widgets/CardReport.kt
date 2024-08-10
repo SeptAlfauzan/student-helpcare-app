@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,64 +41,45 @@ import java.time.LocalDate
 @Composable
 fun CardReport(data: Complaint) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.fillMaxWidth()) {
-                Text(text = data.title, fontWeight = FontWeight.Bold)
-                Text(text = data.desc, color = Color(0xFF547288), textAlign = TextAlign.Right, modifier = Modifier.fillMaxWidth(), fontSize = 12.sp)
-            }
-//            IconButton(onClick = { /*TODO*/ }) {
-//                Icon(
-//                    imageVector = Icons.Default.MoreVert,
-//                    contentDescription = null,
-//                    modifier = Modifier.rotate(90f)
-//                )
-//            }
-        }
-        Box(
-            Modifier
-                .padding(top = 24.dp, bottom = 24.dp)
-                .fillMaxWidth()
-        ) {
-           if(data.imageUrl != null) AsyncImage(
-                model = data.imageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.Gray)
-                    .height(208.dp)
-            )
-            Icon(
-                imageVector = Icons.Default.Comment,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
+        Column(Modifier.fillMaxWidth()) {
+            Text(text = data.title, fontWeight = FontWeight.Bold)
+            Text(
+                text = data.desc,
+                color = Color(0xFF547288),
+                textAlign = TextAlign.Right,
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 12.sp
             )
             Row(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .clip(
-                        RoundedCornerShape(8.dp)
-                    )
-                    .background(Color.Green)
-                    .padding(6.dp)
+                Modifier
+                    .padding(top = 24.dp, bottom = 24.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Icon(
-                    imageVector = Icons.Default.CheckCircle,
+                    imageVector = Icons.Default.Comment,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier
                 )
-                Text(text = "diterima", color = Color.White)
+                StatusIndicator(
+                    isResponded = data.isResponded, modifier = Modifier
+                )
             }
         }
-        if(data.comments.isNotEmpty()){
-            Text(text = stringResource(R.string.comment), modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFF547288))
+
+        if (data.comments.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.comment),
+                modifier = Modifier.padding(vertical = 12.dp),
+                color = Color(0xFF547288)
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AsyncImage(
-                    model = data.comments[0].userProfile.imageUrl,
+                    model = "https://ui-avatars.com/api/?name=Admin",
                     contentDescription = null,
                     modifier = Modifier
                         .padding(top = 24.dp, bottom = 24.dp)
@@ -110,9 +92,34 @@ fun CardReport(data: Complaint) {
                     Text(text = data.comments[0].text)
                 }
             }
+        }else{
+            Text(text = "Belum ada balasan", fontWeight = FontWeight.Light)
         }
     }
 }
+
+@Composable
+fun StatusIndicator(isResponded: Boolean, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .clip(
+                RoundedCornerShape(8.dp)
+            )
+            .background(if (isResponded) Color.Green else Color.Yellow)
+            .padding(6.dp)
+    ) {
+        Icon(
+            imageVector = if (isResponded) Icons.Default.CheckCircle else Icons.Default.HourglassTop,
+            contentDescription = null,
+            tint = if (isResponded) Color.White else Color.Black
+        )
+        Text(
+            text = if (isResponded) "diterima" else "diproses",
+            color = if (isResponded) Color.White else Color.Black
+        )
+    }
+}
+
 
 @Preview
 @Composable
@@ -125,11 +132,11 @@ private fun CardReportPreview() {
                     id = "",
                     title = "Laporan pencurian",
                     desc = "Terjadi sekitar pukul 16.00 di kelas D",
-                    imageUrl =null,
+                    imageUrl = null,
                     isResponded = false,
                     comments = listOf(
                         Comment(
-                            id="",
+                            id = "",
                             text = "Terimakasih atas laporannya, akan segera kami proses. Harap ditunggu ya \uD83D\uDC4D",
                             created = LocalDate.now().toString(),
                             userProfile = UserProfile(

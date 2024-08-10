@@ -32,6 +32,8 @@ class AuthInterceptor @Inject constructor(
                val newToken = runBlocking {
                     callRefreshTokenAPI()
                 }
+
+            Log.d("TAG", "intercept: get new token $newToken")
             response.close()
             val newRequest = originalRequest.newBuilder()
                 .header("Authorization", "Bearer ${newToken}")
@@ -40,7 +42,6 @@ class AuthInterceptor @Inject constructor(
            return chain.proceed(newRequest)
         }
         return response
-//        }
     }
 
     private suspend fun callRefreshTokenAPI(): String {
@@ -55,6 +56,7 @@ class AuthInterceptor @Inject constructor(
             return result.data?.token ?: ""
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.d("TAG", "intercept: get new token ERROR ${e.message} ")
             return ""
         }
     }

@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 
 class DataStorePreference @Inject constructor(@ApplicationContext private val context: Context) {
+//    private val FIRST_OPEN = booleanPreferencesKey("FIRST_OPEN")
     private val AUTH_TOKEN = stringPreferencesKey("LOGIN_TOKEN")
-    private val FIRST_OPEN = booleanPreferencesKey("FIRST_OPEN")
     private val PREVIOUS_LOGIN = stringPreferencesKey("PREVIOUS_LOGIN")
     fun getAuthToken(): Flow<String> = context.datastore.data.map { it[AUTH_TOKEN] ?: "" }
     suspend fun setAuthToken(token: String) = context.datastore.edit { it[AUTH_TOKEN] = token }
@@ -22,7 +22,7 @@ class DataStorePreference @Inject constructor(@ApplicationContext private val co
     fun getPreviousLoginData(): Flow<LoginBody?> = context.datastore.data.map {
         try {
             val gson = Gson()
-            val loginData: LoginBody? = gson.fromJson(it[AUTH_TOKEN], LoginBody::class.java)
+            val loginData: LoginBody? = gson.fromJson(it[PREVIOUS_LOGIN], LoginBody::class.java)
             loginData
         } catch (e: Exception) {
             null
@@ -32,7 +32,7 @@ class DataStorePreference @Inject constructor(@ApplicationContext private val co
     suspend fun setPreviousLoginData(loginBody: LoginBody) = context.datastore.edit {
         val gson = Gson()
         val json = gson.toJson(loginBody)
-        it[AUTH_TOKEN] = json
+        it[PREVIOUS_LOGIN] = json
     }
 
     companion object {
