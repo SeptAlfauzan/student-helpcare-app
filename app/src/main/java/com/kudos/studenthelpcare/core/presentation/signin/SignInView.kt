@@ -44,12 +44,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.helper.Routes
@@ -113,30 +117,20 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                 BlueLogo(
                     Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 84.dp)
+                        .padding(bottom = 12.dp)
                 )
+                Text(text = stringResource(R.string.student_helcare), style = TextStyle(
+                    color = Color.Magenta,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Serif
+                ), modifier = Modifier.padding(bottom = 32.dp))
 
                 SpannableTextScreen(
                     navigateCreateAccount = { navHostController.navigate(Routes.Signup.route) },
                     modifier = Modifier
                         .padding(bottom = 24.dp)
                 )
-//                Button(
-//                    onClick = { /*TODO*/ },
-//                    border = BorderStroke(width = 1.dp, color = Color(0xFF547288)),
-//                    shape = Rounded12,
-//                    modifier = Modifier.fillMaxWidth(),
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = MaterialTheme.colorScheme.surface
-//                    )
-//                ) {
-//                    Image(
-//                        modifier = Modifier.size(36.dp),
-//                        painter = painterResource(id = R.drawable.google_ic),
-//                        contentDescription = null
-//                    )
-//                }
-//                Text(text = "atau", modifier = Modifier.padding(vertical = 24.dp))
                 TextInput(
                     value = username,
                     onChange = { username = it },

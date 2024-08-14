@@ -67,7 +67,6 @@ fun CardReport(data: Complaint) {
                 )
             }
         }
-
         if (data.comments.isNotEmpty()) {
             Text(
                 text = stringResource(R.string.comment),
