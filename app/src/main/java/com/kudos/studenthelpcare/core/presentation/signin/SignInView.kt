@@ -9,9 +9,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -106,6 +108,12 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                 painter = painterResource(id = R.drawable.pattern),
                 contentDescription = "pattern bg"
             )
+            Row(Modifier.fillMaxWidth()) {
+                Image(painter = painterResource(id = R.drawable.merdeka_belajar), contentDescription = null, modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.weight(1f))
+                Image(painter = painterResource(id = R.drawable.tut_wuri_handayani), contentDescription = null, modifier = Modifier.size(48.dp))
+                Image(painter = painterResource(id = R.drawable.um), contentDescription = null, modifier = Modifier.size(48.dp))
+            }
             Column(
                 Modifier
                     .padding(padding)
@@ -148,10 +156,13 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                 )
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "lupa password?")
+                TextButton(onClick = {
+                    navHostController.navigate(Routes.ChangePassword.route)
+                }) {
+                    Text(text = stringResource(R.string.forget_password))
                 }
                 Button(
+                    enabled = username.isNotEmpty() && password.isNotEmpty(),
                     shape = Rounded12,
                     onClick = {
                         signInViewModel.signin(username, password)
@@ -197,7 +208,7 @@ fun SpannableTextScreen(
 private fun Preview() {
     StudentHelpcareTheme {
         Surface {
-//            SignInView()
+//            SignInView
         }
     }
 }

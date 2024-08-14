@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.kudos.studenthelpcare.R
@@ -59,6 +60,13 @@ fun ProfileView(
                         painter = painterResource(id = R.drawable.pattern),
                         contentDescription = "pattern bg",
                     )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.bhinneka),
+                        modifier = Modifier.align(Alignment.BottomCenter).zIndex(2f),
+                        contentDescription = null,
+                    )
+
                     Column(
                         Modifier
                             .fillMaxSize()

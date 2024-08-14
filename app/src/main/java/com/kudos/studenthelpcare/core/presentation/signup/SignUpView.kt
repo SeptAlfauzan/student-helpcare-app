@@ -53,7 +53,7 @@ fun SignUpView(
     navHostController: NavHostController,
     schoolViewModel: SchoolViewModel,
     signupViewModel: SignupViewModel,
-    modiifer: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var password by remember {
@@ -96,108 +96,111 @@ fun SignUpView(
             }
         }
     }
+    Box(
+        modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.pattern), contentDescription = "pattern bg"
+        )
 
+        Column(
+            Modifier
+                .padding(24.dp)
 
-    Scaffold { padding ->
-        Box(
-            Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
+            BlueLogo(
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 12.dp)
+            )
             Image(
-                painter = painterResource(id = R.drawable.pattern),
-                contentDescription = "pattern bg"
+                painter = painterResource(id = R.drawable.um),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .size(64.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
-            Column(
-                Modifier
-                    .padding(padding)
-                    .padding(24.dp)
-
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                BlueLogo(
-                    Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 84.dp)
-                )
-                SpannableTextScreen(
-                    navigate = {navHostController.navigate(Routes.Signin.route)}, modifier = Modifier.padding(bottom = 24.dp)
-                )
-                TextInput(
-                    value = name,
-                    onChange = { name = it },
-                    label = stringResource(R.string.name),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-                TextInput(
-                    value = email,
-                    onChange = { email = it },
-                    label = stringResource(R.string.username),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-                TextInput(
-                    value = password,
-                    onChange = { password = it },
-                    isSecure = true,
-                    label = stringResource(R.string.password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-                SearchableDropdown(label = "School",
-                    onValidSelect = {
-                        Log.d("TAG", "SignUpView: $it")
-                        selectedSchoolId = it
-                    },
-                    onInvalidSelect = {},
-                    readonly = schoolItems != null,
-                    items = schoolItems?.map { it.name!! }?.toList() ?: listOf(),
-                    itemIds = schoolItems?.map { it.id!! }?.toList() ?: listOf(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-                Button(
-                    enabled = password.isNotEmpty() && name.isNotEmpty() && email.isNotEmpty() && selectedSchoolId.isNotEmpty(),
-                    shape = Rounded12,
-                    onClick = {
-                        val signupBody = SignupBody(
-                            email = email,
-                            password = password,
-                            name = name,
-                            idSchool = selectedSchoolId
-                        )
-                        signupViewModel.signup(signupBody = signupBody, onSuccess = {
-                            navHostController.navigate(Routes.Signin.route) {
-                                popUpTo(navHostController.graph.id) {
-                                    inclusive = false
-                                }
+            SpannableTextScreen(
+                navigate = { navHostController.navigate(Routes.Signin.route) },
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+            TextInput(
+                value = name,
+                onChange = { name = it },
+                label = stringResource(R.string.name),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+            TextInput(
+                value = email,
+                onChange = { email = it },
+                label = stringResource(R.string.username),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+            TextInput(
+                value = password,
+                onChange = { password = it },
+                isSecure = true,
+                label = stringResource(R.string.password),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+            SearchableDropdown(
+                label = "School",
+                onValidSelect = {
+                    Log.d("TAG", "SignUpView: $it")
+                    selectedSchoolId = it
+                },
+                onInvalidSelect = {},
+                readonly = schoolItems != null,
+                items = schoolItems?.map { it.name!! }?.toList() ?: listOf(),
+                itemIds = schoolItems?.map { it.id!! }?.toList() ?: listOf(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+            Button(
+                enabled = password.isNotEmpty() && name.isNotEmpty() && email.isNotEmpty() && selectedSchoolId.isNotEmpty(),
+                shape = Rounded12,
+                onClick = {
+                    val signupBody = SignupBody(
+                        email = email, password = password, name = name, idSchool = selectedSchoolId
+                    )
+                    signupViewModel.signup(signupBody = signupBody, onSuccess = {
+                        navHostController.navigate(Routes.Signin.route) {
+                            popUpTo(navHostController.graph.id) {
+                                inclusive = false
                             }
-                        }, onFail = {
-                            Toast.makeText(context, "Error: $it", Toast.LENGTH_SHORT).show()
-                        })
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                     if(signupViewModel.isLOading.collectAsState().value) {
-                         CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                     } else Text(text = "Register")
-                }
+                        }
+                    }, onFail = {
+                        Toast.makeText(context, "Error: $it", Toast.LENGTH_SHORT).show()
+                    })
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (signupViewModel.isLOading.collectAsState().value) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else Text(text = "Register")
             }
-
         }
+
     }
 }
 
 @Composable
 fun SpannableTextScreen(
-    navigate: () -> Unit = {}, modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigate: () -> Unit = {},
 ) {
     val text = buildAnnotatedString {
         append("Sudah punya akun? ")
@@ -217,13 +220,3 @@ fun SpannableTextScreen(
         }
     })
 }
-
-//@Preview(device = Devices.PIXEL_4)
-//@Composable
-//private fun Preview() {
-//    StudentHelpcareTheme {
-//        Surface {
-//            SignUpView(rememberNavController())
-//        }
-//    }
-//}

@@ -13,4 +13,5 @@
     <string name="name">name</string>
     <string name="password">Password</string>
     <string name="student_helcare">Student\nHelcare</string>
+    <string name="forget_password">lupa password?</string>
 </resources>
