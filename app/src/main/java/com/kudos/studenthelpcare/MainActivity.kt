@@ -31,6 +31,7 @@ import com.kudos.studenthelpcare.core.presentation.forgotpassword.ForgotPassword
 import com.kudos.studenthelpcare.core.presentation.profile.ProfileViewModel
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignupViewModel
+import com.kudos.studenthelpcare.core.utils.FlavorUtils
 import com.kudos.studenthelpcare.ui.theme.StudentHelpcareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,6 +47,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
+        FlavorUtils.printFlavorName()
 
         setContent {
 

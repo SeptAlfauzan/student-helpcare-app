@@ -49,7 +49,7 @@ class AuthInterceptor @Inject constructor(
             val previousLoginData = dataStorePreference.getPreviousLoginData().first() ?: return ""
 
             Log.d("TAG", "callRefreshTokenAPI: $previousLoginData")
-            val result = authAPIServices.login(previousLoginData!!)
+            val result = authAPIServices.login(previousLoginData)
 
             dataStorePreference.setAuthToken(result.data?.token ?: "")
 

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -7,11 +9,45 @@ plugins {
     alias(libs.plugins.googleGmsGoogleServices)
 }
 
+fun loadFlavorProperties(flavor: String): Properties {
+    val propertiesFile = project.rootProject.file("$flavor.properties")
+    val properties = Properties()
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.inputStream())
+    }
+    return properties
+}
+
 android {
     namespace = "com.kudos.studenthelpcare"
     compileSdk = 34
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            val properties = loadFlavorProperties("dev")
+
+            buildConfigField(
+                type = "String", name = "MQTT_PASSWORD", value = properties.getProperty("MQTT_PASSWORD") ?: ""
+            )
+        }
+        create("prod") {
+            dimension = "environment"
+            val properties = loadFlavorProperties("prod")
+
+            buildConfigField(
+                    type = "String", name = "MQTT_PASSWORD", value = properties.getProperty("MQTT_PASSWORD") ?: ""
+            )
+        }
+    }
+
+
+
     defaultConfig {
+
         applicationId = "com.kudos.studenthelpcare"
         minSdk = 24
         targetSdk = 34
@@ -28,8 +64,12 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
+        }
+        debug {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -42,6 +82,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -88,11 +129,11 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.2")
 
     //Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
-    implementation ("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
 
 
     //Datastore

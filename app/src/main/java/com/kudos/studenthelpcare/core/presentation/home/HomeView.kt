@@ -1,6 +1,7 @@
 package com.kudos.studenthelpcare.core.presentation.home
 
 import android.graphics.Paint.Align
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.kudos.studenthelpcare.BuildConfig
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.data.source.remote.response.UserProfileResponse
 import com.kudos.studenthelpcare.core.domain.entities.Comment
@@ -47,6 +50,7 @@ import com.kudos.studenthelpcare.core.presentation.profile.ProfileViewModel
 import com.kudos.studenthelpcare.core.presentation.widgets.CardReport
 import com.kudos.studenthelpcare.core.presentation.widgets.ErrorHandler
 import com.kudos.studenthelpcare.core.presentation.widgets.PulltoRefreshLazyColumn
+import com.kudos.studenthelpcare.core.utils.FlavorUtils.Companion.loadFlavorProperties
 import com.kudos.studenthelpcare.core.utils.ResultState
 import java.time.LocalDate
 
@@ -58,6 +62,7 @@ fun HomeView(
 ) {
     val profileState = profileViewModel.profileState.collectAsState().value
     val avatarModifier = Modifier.padding(bottom = 8.dp)
+//    val mqttPass = BuildConfig.
     Box(Modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -142,6 +147,10 @@ private fun ProfilePic(
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val pass = context.loadFlavorProperties("MQTT_PASSWORD")
+    Log.d("FlavorUtils", "ProfilePic: $pass")
+
     profileState.let {
         when (it) {
             ResultState.Empty -> getProfile()
