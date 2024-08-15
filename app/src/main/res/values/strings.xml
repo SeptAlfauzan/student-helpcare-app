@@ -4,7 +4,7 @@
     <string name="next">Selanjutnya</string>
     <string name="finish">selesai</string>
     <string name="signin">Masuk</string>
-    <string name="username">Username</string>
+    <string name="email">Email</string>
     <string name="send">Kirim</string>
     <string name="comment">Komentar</string>
     <string name="see_more_comment">Lihat komentar lainnnya</string>
@@ -12,6 +12,19 @@
     <string name="your_report">Laporanmu</string>
     <string name="name">name</string>
     <string name="password">Password</string>
-    <string name="student_helcare">Student\nHelcare</string>
+    <string name="student_helpcare">Student\nHelpcare</string>
     <string name="forget_password">lupa password?</string>
+    <string name="app_guide_menu">Panduan penggunaan aplikasi</string>
+    <string name="bullying_menu">Kenali apa itu bullying</string>
+    <string name="reset_password_menu">Reset password</string>
+    <string name="signout_menu">Keluar</string>
+    <string name="others_menu">Lainnya</string>
+    <string name="pattern_bg">pattern-bg</string>
+    <string name="email_sent">Email telah dikirim</string>
+    <string name="back">Kembali</string>
+    <string name="send_email_change_password">Kirim email ganti password</string>
+    <string name="change_password">Ubah password</string>
+    <string name="insert_email">Masukkan email akun anda</string>
+    <string name="error_send_email_default_text">Error when sending email reset password!</string>
+    <string name="fail_to_reset_password">Fail to reset password!</string>
 </resources>

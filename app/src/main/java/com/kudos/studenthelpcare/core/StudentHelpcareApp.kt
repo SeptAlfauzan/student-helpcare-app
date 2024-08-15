@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
@@ -17,12 +18,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.ComplaintsViewModel
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
@@ -37,6 +40,9 @@ import com.kudos.studenthelpcare.core.presentation.signin.SignInView
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.signup.SignUpView
 import com.kudos.studenthelpcare.core.presentation.signup.SignupViewModel
+import com.kudos.studenthelpcare.core.presentation.widgets.PDFReader
+import com.kudos.studenthelpcare.core.presentation.widgets.PdfReaderLib
+import com.kudos.studenthelpcare.core.utils.FileUtils
 import okhttp3.Route
 import kotlin.math.sin
 
@@ -54,7 +60,9 @@ fun StudentHelpcareApp(
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier, topBar = {
-        if (currentRoute == Routes.ChangePassword.route || currentRoute == Routes.BullyingMaterial.route) TopAppBar(
+        val routeWithAppbarNav =
+            currentRoute == Routes.ChangePassword.route || currentRoute == Routes.BullyingMaterial.route || currentRoute == Routes.AppGuide.route
+        if (routeWithAppbarNav) TopAppBar(
             title = { },
             navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
@@ -94,7 +102,8 @@ fun StudentHelpcareApp(
                 PostReportView(
                     profileViewModel = profileViewModel,
                     complaintsViewModel = complaintsViewModel,
-                    navigator = navController)
+                    navigator = navController
+                )
             }
             composable(route = Routes.Signin.route) {
                 SignInView(signInViewModel, navController)
@@ -109,13 +118,18 @@ fun StudentHelpcareApp(
             composable(route = Routes.Profile.route) {
                 ProfileView(
                     profileViewModel = profileViewModel,
-                    signInViewModel = signInViewModel, navHostController = navController)
+                    signInViewModel = signInViewModel,
+                    navHostController = navController
+                )
             }
             composable(route = Routes.ChangePassword.route) {
                 ForgotPasswordView(navController, forgotPasswordViewModel)
             }
             composable(route = Routes.BullyingMaterial.route) {
                 BullyingView()
+            }
+            composable(route = Routes.AppGuide.route) {
+                PdfReaderLib()
             }
         }
     }

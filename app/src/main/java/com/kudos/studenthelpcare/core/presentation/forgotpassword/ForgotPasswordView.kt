@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,7 +56,6 @@ fun ForgotPasswordView(
     }
 
     LaunchedEffect(Unit) {
-        Log.d("TAG", "ForgotPasswordView:  triggered")
         isSuccessfullySendEmail = false
     }
 
@@ -63,7 +63,7 @@ fun ForgotPasswordView(
         modifier = modifier.fillMaxSize()
     ) {
         Image(painter = painterResource(id = R.drawable.pattern),
-            contentDescription = "pattern bg",
+            contentDescription = stringResource(R.string.pattern_bg),
             modifier = Modifier.drawWithCache {
                 onDrawWithContent {
                     drawContent()
@@ -107,10 +107,10 @@ private fun InputTemplateLayout(
         when (it) {
             ResultState.Empty -> loading = false
             is ResultState.Fail -> {
-                MyAlertDialog(onDismissRequest = { /*TODO*/ },
-                    onConfirmation = { /*TODO*/ },
-                    dialogTitle = "Fail to reset password!",
-                    dialogText = it.error?.message ?: "Error when sending email reset password!",
+                MyAlertDialog(onDismissRequest = {  },
+                    onConfirmation = {  },
+                    dialogTitle = stringResource(R.string.fail_to_reset_password),
+                    dialogText = it.error?.message ?: stringResource(R.string.error_send_email_default_text),
                     icon = Icons.Default.SmsFailed
                 )
                 loading = false
@@ -134,11 +134,11 @@ private fun InputTemplateLayout(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Ubah password", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Masukkan email akun anda")
+            Text(text = stringResource(R.string.change_password), fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.insert_email))
             TextInput(
                 value = email,
-                label = "Email",
+                label = stringResource(id = R.string.email),
                 onChange = { email = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -152,7 +152,7 @@ private fun InputTemplateLayout(
         ) {
             if (loading) CircularProgressIndicator(
                 color = Color.White, modifier = Modifier.size(24.dp)
-            ) else Text(text = "Kirim email ganti password")
+            ) else Text(text = stringResource(R.string.send_email_change_password))
 
         }
     }
@@ -172,15 +172,15 @@ private fun SuccessSendTemplateLayout(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Email telah dikirim", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Email telah dikirim")
+            Text(text = stringResource(R.string.email_sent), fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.email_sent))
         }
         Button(
             onClick = { onNavBack() }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
         ) {
-            Text(text = "Kembali")
+            Text(text = stringResource(R.string.back))
         }
     }
 }

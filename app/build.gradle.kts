@@ -106,4 +106,6 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.02.01"))
     //splash screen
     implementation("androidx.core:core-splashscreen:1.0.0")
+    //pdf reader
+    implementation("io.github.grizzi91:bouquet:1.1.2")
 }

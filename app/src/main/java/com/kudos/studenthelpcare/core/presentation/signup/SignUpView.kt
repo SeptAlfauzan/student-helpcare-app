@@ -18,7 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -141,7 +140,7 @@ fun SignUpView(
             TextInput(
                 value = email,
                 onChange = { email = it },
-                label = stringResource(R.string.username),
+                label = stringResource(R.string.email),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
