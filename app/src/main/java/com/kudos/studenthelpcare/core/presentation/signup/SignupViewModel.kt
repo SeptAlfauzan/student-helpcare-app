@@ -17,8 +17,16 @@ import javax.inject.Inject
 class SignupViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isLOading: StateFlow<Boolean> = _isLoading
+    private var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+    private var _isError: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isError: StateFlow<Boolean> = _isError
+
+    fun resetIsError() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isError.value = false
+        }
+    }
 
     fun signup(
         signupBody: SignupBody,
@@ -27,6 +35,7 @@ class SignupViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
+
             try {
                 authRepository.signup(signupBody)
 
@@ -37,8 +46,9 @@ class SignupViewModel @Inject constructor(
                 withContext(Dispatchers.Main) {
                     onFail(e.message.toString())
                 }
+                _isError.value = true
             } finally {
-                _isLoading.value = true
+                _isLoading.value = false
             }
         }
     }

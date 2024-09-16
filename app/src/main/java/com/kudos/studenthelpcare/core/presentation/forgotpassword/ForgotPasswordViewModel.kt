@@ -29,4 +29,9 @@ class ForgotPasswordViewModel @Inject constructor(
             })
         }
     }
+    fun resetState(){
+        viewModelScope.launch {
+            _state.value = ResultState.Empty
+        }
+    }
 }

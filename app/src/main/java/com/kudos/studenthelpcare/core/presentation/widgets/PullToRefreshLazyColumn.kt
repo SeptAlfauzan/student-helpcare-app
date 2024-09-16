@@ -2,6 +2,7 @@ package com.kudos.studenthelpcare.core.presentation.widgets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,12 +32,14 @@ fun <T> PulltoRefreshLazyColumn(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(0.dp),
     lazyListState: LazyListState = rememberLazyListState()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     Box(modifier = Modifier.nestedScroll(pullToRefreshState.nestedScrollConnection)) {
 
         LazyColumn(
+            contentPadding = paddingValues,
             modifier = modifier.fillMaxSize(),
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(12.dp)

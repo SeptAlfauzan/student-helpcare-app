@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,6 +68,10 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
         mutableStateOf("")
     }
 
+    LaunchedEffect(Unit) {
+        signInViewModel.resetSigninResult()
+    }
+
     signInViewModel.signinResult.collectAsState().value.let {
         when (it) {
             is ResultState.Fail -> {
@@ -91,10 +99,22 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
     Scaffold { padding ->
         Box(Modifier.fillMaxSize()) {
             Image(
+
                 painter = painterResource(id = R.drawable.pattern),
-                contentDescription = "pattern bg"
+                contentDescription = "pattern bg",
+                modifier = Modifier.drawWithCache {
+                    val gradient = Brush.verticalGradient(
+                        colors = listOf(Color.White, Color.Transparent),
+                        startY = size.height/3,
+                        endY = size.height
+                    )
+                    onDrawWithContent {
+                        drawContent()
+                        drawRect(gradient,blendMode = BlendMode.Darken)
+                    }
+                }
             )
-            Row(Modifier.fillMaxWidth()) {
+            Row(Modifier.fillMaxWidth().padding(top = 12.dp)) {
                 Image(painter = painterResource(id = R.drawable.merdeka_belajar), contentDescription = null, modifier = Modifier.height(48.dp))
                 Spacer(modifier = Modifier.weight(1f))
                 Image(painter = painterResource(id = R.drawable.tut_wuri_handayani), contentDescription = null, modifier = Modifier.size(48.dp))
@@ -114,7 +134,7 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
                         .padding(bottom = 12.dp)
                 )
                 Text(text = stringResource(R.string.student_helpcare), style = TextStyle(
-                    color = Color.Magenta,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif
@@ -168,7 +188,8 @@ fun SignInView(signInViewModel: SignInViewModel, navHostController: NavHostContr
 
 @Composable
 fun SpannableTextScreen(
-    navigateCreateAccount: () -> Unit = {}, modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateCreateAccount: () -> Unit = {},
 ) {
     val text = buildAnnotatedString {
         append("Belum punya akun? ")

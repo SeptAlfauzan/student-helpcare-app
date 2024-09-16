@@ -1,10 +1,6 @@
 package com.kudos.studenthelpcare.core.presentation.profile
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.CalendarContract.Colors
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.SmsFailed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,14 +36,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.kudos.studenthelpcare.MainActivity
 import com.kudos.studenthelpcare.R
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.signin.SignInViewModel
 import com.kudos.studenthelpcare.core.presentation.widgets.ErrorHandler
-import com.kudos.studenthelpcare.core.presentation.widgets.MyAlertDialog
 import com.kudos.studenthelpcare.core.utils.ResultState
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
 fun ProfileView(
@@ -147,8 +139,10 @@ fun ProfileView(
                             TileMenuItem(text = stringResource(R.string.bullying_menu), action = {
                                 navHostController.navigate(Routes.BullyingMaterial.route)
                             })
+                            TileMenuItem(text = stringResource(R.string.about_us), action ={
+                                navHostController.navigate(Routes.AboutUs.route)
+                            })
                             TileMenuItem(text = stringResource(R.string.app_guide_menu), action = {
-//                                openPdfGuideOnBrowser(context)
                                 navHostController.navigate(Routes.AppGuide.route)
                             })
                             TileMenuItem(text = stringResource(R.string.reset_password_menu),
@@ -174,13 +168,6 @@ fun ProfileView(
             }
         }
     }
-}
-
-fun openPdfGuideOnBrowser(context: Context) {
-    val url =
-        "https://firebasestorage.googleapis.com/v0/b/student-helpcare.appspot.com/o/documents%2FPetunjuk%20Aplikasi%20Student%20Helpcare%20_compressed.pdf?alt=media&token="
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    context.startActivity(browserIntent)
 }
 
 @Composable

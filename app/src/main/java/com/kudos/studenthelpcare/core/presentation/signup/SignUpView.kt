@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SmsFailed
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -42,10 +44,12 @@ import com.kudos.studenthelpcare.core.domain.entities.SignupBody
 import com.kudos.studenthelpcare.core.helper.Routes
 import com.kudos.studenthelpcare.core.presentation.SchoolViewModel
 import com.kudos.studenthelpcare.core.presentation.widgets.BlueLogo
+import com.kudos.studenthelpcare.core.presentation.widgets.MyAlertDialog
 import com.kudos.studenthelpcare.core.presentation.widgets.SearchableDropdown
 import com.kudos.studenthelpcare.core.presentation.widgets.TextInput
 import com.kudos.studenthelpcare.core.utils.ResultState
 import com.kudos.studenthelpcare.ui.theme.Rounded12
+import kotlin.math.sign
 
 @Composable
 fun SignUpView(
@@ -54,7 +58,9 @@ fun SignUpView(
     signupViewModel: SignupViewModel,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    var errorMessage by remember {
+        mutableStateOf("")
+    }
     var password by remember {
         mutableStateOf("")
     }
@@ -71,6 +77,25 @@ fun SignUpView(
 
     var selectedSchoolId by remember {
         mutableStateOf("")
+    }
+
+    signupViewModel.isError.collectAsState().value.let {
+        if(it){
+            MyAlertDialog(
+                isShow = true,
+                onDismissRequest = {
+                    errorMessage = ""
+                    signupViewModel.resetIsError()
+                },
+                onConfirmation = {
+                    errorMessage = ""
+                    signupViewModel.resetIsError()
+                },
+                dialogTitle = "Registrasi Gagal!",
+                dialogText = errorMessage,
+                icon = Icons.Default.SmsFailed
+            )
+        }
     }
 
     schoolViewModel.schools.collectAsState().value.let {
@@ -98,6 +123,7 @@ fun SignUpView(
     Box(
         modifier.fillMaxSize()
     ) {
+
         Image(
             painter = painterResource(id = R.drawable.pattern), contentDescription = "pattern bg"
         )
@@ -182,12 +208,12 @@ fun SignUpView(
                             }
                         }
                     }, onFail = {
-                        Toast.makeText(context, "Error: $it", Toast.LENGTH_SHORT).show()
+                        errorMessage = "Silahkan cek kembali data anda! $it"
                     })
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                if (signupViewModel.isLOading.collectAsState().value) {
+                if (signupViewModel.isLoading.collectAsState().value) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                 } else Text(text = "Register")
             }

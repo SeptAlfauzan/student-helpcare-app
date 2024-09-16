@@ -56,6 +56,7 @@ fun ForgotPasswordView(
     }
 
     LaunchedEffect(Unit) {
+        forgotPasswordViewModel.resetState()
         isSuccessfullySendEmail = false
     }
 
@@ -107,10 +108,12 @@ private fun InputTemplateLayout(
         when (it) {
             ResultState.Empty -> loading = false
             is ResultState.Fail -> {
-                MyAlertDialog(onDismissRequest = {  },
-                    onConfirmation = {  },
+                MyAlertDialog(
+                    onDismissRequest = { },
+                    onConfirmation = { },
                     dialogTitle = stringResource(R.string.fail_to_reset_password),
-                    dialogText = it.error?.message ?: stringResource(R.string.error_send_email_default_text),
+                    dialogText = it.error?.message
+                        ?: stringResource(R.string.error_send_email_default_text),
                     icon = Icons.Default.SmsFailed
                 )
                 loading = false
@@ -126,15 +129,18 @@ private fun InputTemplateLayout(
     Column(
         modifier
             .verticalScroll(rememberScrollState())
-            .padding(24.dp)
-        ,
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.change_password), fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(R.string.change_password),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
             Text(text = stringResource(R.string.insert_email))
             TextInput(
                 value = email,
@@ -172,7 +178,11 @@ private fun SuccessSendTemplateLayout(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.email_sent), fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(R.string.email_sent),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
             Text(text = stringResource(R.string.email_sent))
         }
         Button(

@@ -1,5 +1,6 @@
 package com.kudos.studenthelpcare.core
 
+import AboutUsView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -127,6 +128,9 @@ fun StudentHelpcareApp(
             }
             composable(route = Routes.BullyingMaterial.route) {
                 BullyingView()
+            }
+            composable(route = Routes.AboutUs.route) {
+                AboutUsView()
             }
             composable(route = Routes.AppGuide.route) {
                 PdfReaderLib()

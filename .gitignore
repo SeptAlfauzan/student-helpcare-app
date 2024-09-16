@@ -15,3 +15,5 @@
 local.properties
 dev.properties
 prod.properties
+
+*/google-services.json

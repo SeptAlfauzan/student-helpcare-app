@@ -51,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -81,6 +82,7 @@ fun PostReportView(
     profileViewModel: ProfileViewModel,
     complaintsViewModel: ComplaintsViewModel, navigator: NavHostController
 ) {
+    val focusManager = LocalFocusManager.current
     var report by remember {
         mutableStateOf("")
     }
@@ -144,7 +146,10 @@ fun PostReportView(
             },
             actions = {
                 Button(
-                    onClick = { complaintsViewModel.postComplaint(report) },
+                    onClick = {
+                        focusManager.clearFocus()
+                        complaintsViewModel.postComplaint(report)
+                    },
                     enabled = report.isNotEmpty() && postComplaintState != ResultState.Loading,
                     border = BorderStroke(width = 1.dp, color = Color(0xFF547288)),
                     shape = Rounded12,
